@@ -1,0 +1,313 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Quicksand:wght@400;500&display=swap");
+
+/* Reusable variables (DRY principle: single source of truth) */
+:root {
+  /* Fonts */
+  --font-arcade: "Press Start 2P", cursive;
+  --font-body: "Quicksand", sans-serif;
+
+  /* Font sizes (fluid with clamp() where responsive) */
+  --fs-title: clamp(20px, 7vw, 40px);
+  --fs-message: clamp(11px, 3.5vw, 16px);
+  --fs-symbol: clamp(1.5rem, 9vw, 2.5rem);
+  --fs-trophy: clamp(60px, 18vw, 90px);
+  --fs-score: 28px;
+  --fs-victory: 20px;
+  --fs-button: 14px;
+  --fs-label: 11px;
+
+  /* Neon colors (hex for direct use, -rgb for transparent rgba()) */
+  --neon-cyan: #00f0ff;
+  --neon-cyan-rgb: 0, 240, 255;
+  --neon-magenta: #ff00c8;
+  --neon-magenta-rgb: 255, 0, 200;
+  --neon-yellow: #ffe600;
+  --neon-yellow-rgb: 255, 230, 0;
+  --neon-blue: #0088ff;
+
+  /* Background colors */
+  --bg-dark: #0d0221;
+  --bg-dark-rgb: 13, 2, 33;
+  --bg-cell: #1a0938;
+  --bg-cell-hover: #2a1255;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  /* Dark arcade room background + discreet neon grid */
+  background-color: var(--bg-dark);
+  background-image:
+    linear-gradient(rgba(var(--neon-magenta-rgb), 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--neon-cyan-rgb), 0.08) 1px, transparent 1px);
+  background-size: 40px 40px;
+  color: azure;
+  font-family: var(--font-body);
+
+  /* Layout : all centered and stacked */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1rem, 4vw, 2rem);
+  padding: clamp(1rem, 4vw, 2rem);
+}
+
+h1 {
+  text-align: center;
+  font-family: var(--font-arcade);
+  font-size: var(--fs-title);
+  line-height: 1.4;
+  color: var(--neon-cyan);
+
+  /* Neon effect */
+  text-shadow:
+    0 0 5px var(--neon-cyan),
+    0 0 15px var(--neon-cyan),
+    0 0 30px var(--neon-blue);
+}
+
+.info {
+  font-family: var(--font-arcade);
+  font-size: var(--fs-message);
+  line-height: 1.5;
+  text-align: center;
+  color: var(--neon-magenta);
+  text-shadow: 0 0 8px var(--neon-magenta);
+  min-height: 1.5em;
+}
+
+.scoreboard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: clamp(0.75rem, 3vw, 1.5rem);
+  font-family: var(--font-arcade);
+}
+
+.score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1.2rem;
+  border-radius: 8px;
+  border: 3px solid;
+  min-width: 7rem;
+}
+
+.score-label {
+  font-size: var(--fs-label);
+}
+
+.score-value {
+  font-size: var(--fs-score);
+}
+
+/* Score player X */
+.score-x {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  box-shadow:
+    0 0 10px rgba(var(--neon-cyan-rgb), 0.5),
+    inset 0 0 10px rgba(var(--neon-cyan-rgb), 0.2);
+  text-shadow: 0 0 8px var(--neon-cyan);
+}
+
+/* Score player O */
+.score-o {
+  border-color: var(--neon-magenta);
+  color: var(--neon-magenta);
+  box-shadow:
+    0 0 10px rgba(var(--neon-magenta-rgb), 0.5),
+    inset 0 0 10px rgba(var(--neon-magenta-rgb), 0.2);
+  text-shadow: 0 0 8px var(--neon-magenta);
+}
+
+.objectif {
+  font-size: var(--fs-button);
+  line-height: 1.6;
+  text-align: center;
+  color: var(--neon-yellow);
+  text-shadow: 0 0 8px var(--neon-yellow);
+}
+
+.tictactoe {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: min(20rem, 85vw);
+  aspect-ratio: 1 / 1;
+  padding: 10px;
+  background-color: rgba(var(--neon-cyan-rgb), 0.05);
+  border: 3px solid var(--neon-cyan);
+  border-radius: 8px;
+  box-shadow:
+    0 0 10px var(--neon-cyan),
+    0 0 30px rgba(var(--neon-cyan-rgb), 0.4),
+    inset 0 0 15px rgba(var(--neon-cyan-rgb), 0.2);
+}
+
+.cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font-arcade);
+  font-size: var(--fs-symbol);
+  background-color: var(--bg-cell);
+  border: 2px solid rgba(var(--neon-cyan-rgb), 0.3);
+  border-radius: 4px;
+  cursor: pointer;
+  transition:
+    background-color 0.15s,
+    box-shadow 0.15s;
+}
+
+.cell:hover {
+  background-color: var(--bg-cell-hover);
+  box-shadow: inset 0 0 12px rgba(var(--neon-cyan-rgb), 0.5);
+}
+
+/* Symbols colors */
+.cell.x {
+  color: var(--neon-cyan);
+  text-shadow:
+    0 0 10px var(--neon-cyan),
+    0 0 20px var(--neon-cyan);
+}
+
+.cell.o {
+  color: var(--neon-magenta);
+  text-shadow:
+    0 0 10px var(--neon-magenta),
+    0 0 20px var(--neon-magenta);
+}
+
+#restart,
+#new-match {
+  font-family: var(--font-arcade);
+  font-size: var(--fs-button);
+  color: var(--neon-yellow);
+  background-color: transparent;
+  border: 3px solid var(--neon-yellow);
+  border-radius: 6px;
+  padding: 14px 22px;
+  cursor: pointer;
+  text-shadow: 0 0 6px var(--neon-yellow);
+  box-shadow: 0 0 10px rgba(var(--neon-yellow-rgb), 0.5);
+  transition:
+    background-color 0.15s,
+    color 0.15s,
+    box-shadow 0.15s;
+}
+
+#restart:hover,
+#new-match:hover {
+  background-color: var(--neon-yellow);
+  color: var(--bg-dark);
+  text-shadow: none;
+  box-shadow:
+    0 0 20px var(--neon-yellow),
+    0 0 40px rgba(var(--neon-yellow-rgb), 0.6);
+}
+
+/* ===== Victory overlay ===== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(var(--bg-dark-rgb), 0.88);
+  backdrop-filter: blur(4px);
+  overflow: hidden;
+  z-index: 100;
+}
+
+/* .show -> js overlay */
+.overlay.show {
+  display: flex;
+}
+
+.victory-card {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: clamp(1.5rem, 6vw, 2.5rem) clamp(1.5rem, 7vw, 3rem);
+  max-width: 90vw;
+  background: var(--bg-cell);
+  border: 4px solid var(--neon-yellow);
+  border-radius: 12px;
+  box-shadow:
+    0 0 30px var(--neon-yellow),
+    inset 0 0 20px rgba(var(--neon-yellow-rgb), 0.2);
+  animation: pop-in 0.4s ease-out;
+}
+
+@keyframes pop-in {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.trophy {
+  font-size: var(--fs-trophy);
+  animation: trophy-bounce 1s ease-in-out infinite;
+}
+
+@keyframes trophy-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+.victory-title {
+  font-family: var(--font-arcade);
+  font-size: var(--fs-victory);
+  line-height: 1.5;
+  color: var(--neon-yellow);
+  text-shadow: 0 0 10px var(--neon-yellow);
+  margin: 1.5rem 0;
+}
+
+/* ===== Confettis ===== */
+.confetti-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.confetti {
+  position: absolute;
+  top: -10%;
+  width: 10px;
+  height: 14px;
+  opacity: 0.9;
+  animation: confetti-fall linear forwards;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(110vh) rotate(720deg);
+  }
+}
